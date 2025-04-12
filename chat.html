@@ -1,53 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Fake WhatsApp</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Neon Chat</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="chat-page">
   <div class="container">
-    <h2>Fake WhatsApp</h2>
-    <div id="online-users"></div>
-    <div id="chat-box"></div>
-    <input id="message" type="text" placeholder="Type a message..." />
-    <button id="send">Send</button>
+    <div class="sidebar">
+      <h3>Online Users</h3>
+      <ul id="onlineUsers"></ul>
+    </div>
+    <div class="chat-box">
+      <div class="chat-header" id="chatWith">Welcome!</div>
+      <div class="chat-area" id="chatArea"></div>
+      <div class="message-input">
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
   </div>
 
-  <!-- Replace below with your Render backend URL -->
-  <script src="https://your-backend-name.onrender.com/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io("https://your-backend-name.onrender.com");
-
-    const email = localStorage.getItem("email") || prompt("Enter your email:");
-    localStorage.setItem("email", email);
-    socket.emit("login", email);
-
-    const chatBox = document.getElementById("chat-box");
-    const messageInput = document.getElementById("message");
-    const sendBtn = document.getElementById("send");
-    const onlineDiv = document.getElementById("online-users");
-
-    sendBtn.addEventListener("click", () => {
-      const msg = messageInput.value.trim();
-      if (msg !== "") {
-        socket.emit("chat message", { sender: email, message: msg });
-        messageInput.value = "";
-      }
-    });
-
-    socket.on("chat message", (data) => {
-      const msgDiv = document.createElement("div");
-      const who = data.sender === email ? "You" : data.sender;
-      msgDiv.innerHTML = `<strong>${who}:</strong> ${data.message}`;
-      msgDiv.classList.add("msg");
-      if (who === "You") msgDiv.classList.add("you");
-      chatBox.appendChild(msgDiv);
-      chatBox.scrollTop = chatBox.scrollHeight;
-    });
-
-    socket.on("online users", (users) => {
-      onlineDiv.innerHTML = `<b>Online:</b> ${users.join(", ")}`;
-    });
-  </script>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
