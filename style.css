@@ -1,66 +1,135 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #121212;
-  color: #fff;
   margin: 0;
-  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0f0f1a;
+  color: #00ffcc;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-box {
+  background: #1a1a2e;
+  padding: 2rem;
+  border: 2px solid #00ffcc;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00ffcc;
+  text-align: center;
+}
+
+.login-box input, .login-box button {
+  margin-top: 1rem;
+  padding: 10px;
+  width: 90%;
+  border-radius: 5px;
+  border: none;
+}
+
+.login-box button {
+  background-color: #00ffcc;
+  color: #0f0f1a;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 .container {
-  max-width: 600px;
-  margin: 30px auto;
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 25%;
+  background: #111;
   padding: 1rem;
-  background: #1e1e1e;
-  border-radius: 12px;
-  box-shadow: 0 0 15px #0f0;
-}
-
-h2 {
-  text-align: center;
-  color: #0f0;
-}
-
-#online-users {
-  margin-bottom: 10px;
-  font-size: 0.9rem;
-  color: #ccc;
-}
-
-#chat-box {
-  height: 300px;
+  border-right: 2px solid #00ffcc;
   overflow-y: auto;
-  border: 1px solid #444;
+}
+
+.sidebar h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
   padding: 10px;
+  background: #222;
   margin-bottom: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.sidebar li:hover {
+  background: #00ffcc;
+  color: black;
+}
+
+.chat-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  background: #1a1a2e;
+  padding: 1rem;
+  border-bottom: 2px solid #00ffcc;
+  font-weight: bold;
+}
+
+.chat-area {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  background: #0f0f1a;
+}
+
+.message {
+  margin-bottom: 10px;
+  padding: 10px;
   background: #222;
   border-radius: 10px;
+  max-width: 60%;
 }
 
-.msg {
-  margin-bottom: 8px;
+.sent {
+  align-self: flex-end;
+  background-color: #00ffcc;
+  color: black;
 }
 
-.msg.you {
-  color: #0f0;
+.received {
+  align-self: flex-start;
 }
 
-input, button {
-  width: 100%;
+.message-input {
+  display: flex;
+  padding: 1rem;
+  background: #1a1a2e;
+}
+
+.message-input input {
+  flex: 1;
   padding: 10px;
-  margin-top: 5px;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: 5px;
+  margin-right: 10px;
 }
 
-input {
-  background: #333;
-  color: #fff;
-}
-
-button {
-  background: #0f0;
-  color: #000;
-  font-weight: bold;
+.message-input button {
+  padding: 10px 20px;
+  background-color: #00ffcc;
+  color: black;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
 }
