@@ -20,37 +20,37 @@
   <script src="https://whatsappme.onrender.com/socket.io/socket.io.js"></script>
 
 
-  <script>
-    const socket = io("https://whatsappme.onrender.com");
+ <!-- Load socket.io from your backend -->
+<script src="https://whatsappme.onrender.com/socket.io/socket.io.js"></script>
+<script>
+  const socket = io("https://whatsappme.onrender.com"); // Your backend URL
 
-    const myEmail = localStorage.getItem("email");
-    document.getElementById("userEmail").innerText = myEmail;
+  const email = localStorage.getItem("email") || prompt("Enter your email:");
+  localStorage.setItem("email", email);
 
-    socket.emit("join", myEmail);
+  const chatBox = document.getElementById("chat-box");
+  const messageInput = document.getElementById("message");
+  const sendBtn = document.getElementById("send");
 
-    function sendMessage() {
-      const to = document.getElementById("toEmail").value;
-      const msg = document.getElementById("messageInput").value;
-      if (msg && to) {
-        socket.emit("send-message", { to, from: myEmail, message: msg });
-        addMessage(`To ${to}: ${msg}`, "sent");
-        document.getElementById("messageInput").value = "";
-      }
+  sendBtn.addEventListener("click", () => {
+    const message = messageInput.value;
+    if (message.trim() !== "") {
+      socket.emit("chat message", {
+        sender: email,
+        message: message
+      });
+      messageInput.value = "";
     }
+  });
 
-    socket.on("receive-message", ({ from, message }) => {
-      addMessage(`From ${from}: ${message}`, "received");
-    });
+  socket.on("chat message", (data) => {
+    const msgDiv = document.createElement("div");
+    msgDiv.innerText = `${data.sender}: ${data.message}`;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
+</script>
 
-    function addMessage(msg, type) {
-      const msgBox = document.getElementById("messages");
-      const div = document.createElement("div");
-      div.className = "msg " + type;
-      div.innerText = msg;
-      msgBox.appendChild(div);
-      msgBox.scrollTop = msgBox.scrollHeight;
-    }
-  </script>
   
 
 </body>
