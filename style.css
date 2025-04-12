@@ -1,98 +1,188 @@
-body {
+/* GENERAL RESET AND BASE STYLES */
+* {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #111;
-  color: #fff;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+body {
+  background-color: #0d0d0d;
+  font-family: 'Segoe UI', sans-serif;
+  color: #00ffee;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* NEON TEXT GLOW */
+.glow-text {
+  text-shadow: 0 0 5px #00ffee, 0 0 10px #00ffee, 0 0 20px #00ffee;
+}
+
+/* LOGIN PAGE STYLES */
 .login-container {
+  background: #1a1a1a;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #00ffee;
+  width: 90%;
   max-width: 400px;
-  margin: 100px auto;
-  background: #222;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 20px lime;
   text-align: center;
 }
 
-.login-container input,
-.login-container button {
-  width: 80%;
-  padding: 10px;
+.login-container h1 {
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 12px;
   margin: 10px 0;
+  border-radius: 10px;
   border: none;
-  border-radius: 5px;
+  background: #2a2a2a;
+  color: #00ffee;
+  font-size: 16px;
+  box-shadow: inset 0 0 10px #00ffee40;
 }
 
 .login-container button {
-  background: lime;
+  width: 100%;
+  padding: 12px;
+  background: #00ffee;
   color: #000;
+  border: none;
+  border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: 0.3s ease;
 }
 
-.container {
+.login-container button:hover {
+  background: #00ccdd;
+}
+
+/* CHAT PAGE LAYOUT */
+.chat-wrapper {
   display: flex;
-  height: 100vh;
+  width: 95%;
+  max-width: 1200px;
+  height: 90vh;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 25px #00ffee;
 }
 
-.sidebar {
+/* LEFT SIDE: ONLINE USERS */
+.online-users {
   width: 30%;
-  background: #222;
-  padding: 20px;
-  border-right: 2px solid lime;
-  box-shadow: 0 0 15px lime;
+  background: #141414;
+  border-right: 2px solid #00ffee33;
+  padding: 15px;
+  overflow-y: auto;
 }
 
-.chat-box {
+.online-users h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.online-users ul {
+  list-style: none;
+}
+
+.online-users li {
+  padding: 10px;
+  background: #222;
+  margin: 5px 0;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ffee40;
+}
+
+/* RIGHT SIDE: CHAT WINDOW */
+.chat-area {
   width: 70%;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  box-shadow: inset 0 0 15px lime;
+  background: #1a1a1a;
 }
 
-.chat-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.chat-messages {
+.chat-box {
   flex: 1;
-  background: #111;
-  margin-bottom: 10px;
-  padding: 10px;
+  padding: 15px;
   overflow-y: auto;
-  border: 1px solid lime;
 }
 
-.chat-input {
-  display: flex;
-}
-
-.chat-input input {
-  flex: 1;
+.chat-message {
+  margin-bottom: 10px;
   padding: 10px;
-  background: #333;
-  border: none;
-  color: #fff;
+  background: #2a2a2a;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ffee20;
 }
 
-.chat-input button {
-  background: lime;
+.chat-message strong {
+  color: #00ffee;
+}
+
+/* MESSAGE INPUT */
+.input-area {
+  display: flex;
+  border-top: 2px solid #00ffee33;
+  padding: 10px;
+  background: #111;
+}
+
+#message-input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #2a2a2a;
+  color: #00ffee;
+  font-size: 16px;
+}
+
+#send-btn {
+  padding: 12px 20px;
+  margin-left: 10px;
+  border: none;
+  background: #00ffee;
   color: #000;
-  border: none;
-  padding: 10px 20px;
+  font-weight: bold;
+  border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
+#send-btn:hover {
+  background: #00ccdd;
+}
+
+/* MOBILE RESPONSIVE */
 @media (max-width: 768px) {
-  .container {
+  .chat-wrapper {
     flex-direction: column;
+    height: auto;
   }
-  .sidebar, .chat-box {
+
+  .online-users,
+  .chat-area {
     width: 100%;
   }
-}
 
+  .online-users {
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 2px solid #00ffee33;
+  }
+
+  .chat-box {
+    max-height: 400px;
+  }
+}
