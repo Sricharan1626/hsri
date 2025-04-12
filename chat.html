@@ -17,10 +17,12 @@
     </div>
   </div>
 
-  <script src=""></script>
+  <script src="https://whatsappme.onrender.com/socket.io/socket.io.js"></script>
+
 
   <script>
-    const socket = io();
+    const socket = io("https://whatsappme.onrender.com");
+
     const myEmail = localStorage.getItem("email");
     document.getElementById("userEmail").innerText = myEmail;
 
