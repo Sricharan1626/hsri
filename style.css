@@ -1,58 +1,150 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #111;
+  color: #fff;
+}
+
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px lime;
+  text-align: center;
+}
+
+.login-container input,
+.login-container button {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+}
+
+.login-container button {
+  background: lime;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .container {
   display: flex;
   height: 100vh;
 }
 
 .sidebar {
-  width: 25%;
-  background: #111;
-  padding: 1rem;
-  border-right: 2px solid #00ffcc;
-  overflow-y: auto;
+  width: 30%;
+  background: #222;
+  padding: 20px;
+  border-right: 2px solid lime;
+  box-shadow: 0 0 15px lime;
 }
 
 .chat-box {
-  flex: 1;
+  width: 70%;
   display: flex;
   flex-direction: column;
-  background-color: #0f0f1a;
+  padding: 20px;
+  box-shadow: inset 0 0 15px lime;
 }
 
 .chat-header {
-  padding: 1rem;
-  background: #1a1a2e;
-  border-bottom: 2px solid #00ffcc;
-  font-size: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
-.chat-area {
+.chat-messages {
   flex: 1;
-  padding: 1rem;
+  background: #111;
+  margin-bottom: 10px;
+  padding: 10px;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  border: 1px solid lime;
 }
 
-.message-input {
+.chat-input {
   display: flex;
-  padding: 1rem;
-  background-color: #1a1a2e;
 }
 
-.message-input input {
+.chat-input input {
   flex: 1;
   padding: 10px;
-  border-radius: 5px;
-  margin-right: 10px;
+  background: #333;
   border: none;
+  color: #fff;
 }
 
-.message-input button {
-  padding: 10px 20px;
-  background-color: #00ffcc;
-  color: black;
+.chat-input button {
+  background: lime;
+  color: #000;
   border: none;
-  border-radius: 5px;
-  font-weight: bold;
+  padding: 10px 20px;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  .sidebar, .chat-box {
+    width: 100%;
+  }
+}
+
+/* script.js */
+function checkLogin() {
+  const email = localStorage.getItem("email");
+  if (!email) {
+    window.location.href = "index.html";
+  } else {
+    document.getElementById("userEmail").textContent = email;
+    loadOnlineUsers();
+    loadMessages();
+    setInterval(loadMessages, 2000);
+  }
+}
+
+function logout() {
+  localStorage.removeItem("email");
+  window.location.href = "index.html";
+}
+
+function loadOnlineUsers() {
+  const email = localStorage.getItem("email");
+  document.getElementById("onlineUsers").innerHTML = `<li>${email}</li>`;
+}
+
+function sendMessage() {
+  const msg = document.getElementById("messageInput").value;
+  if (!msg.trim()) return;
+  const email = localStorage.getItem("email");
+  const data = { email, message: msg, time: new Date().toLocaleTimeString() };
+  fetch("https://whatsappme.onrender.com/send", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(() => {
+    document.getElementById("messageInput").value = "";
+    loadMessages();
+  });
+}
+
+function loadMessages() {
+  fetch("https://whatsappme.onrender.com/messages")
+    .then(res => res.json())
+    .then(data => {
+      const chat = document.getElementById("chatMessages");
+      chat.innerHTML = "";
+      data.forEach(msg => {
+        const el = document.createElement("div");
+        el.innerHTML = `<strong>${msg.email}</strong>: ${msg.message} <small>${msg.time}</small>`;
+        chat.appendChild(el);
+      });
+      chat.scrollTop = chat.scrollHeight;
+    });
 }
