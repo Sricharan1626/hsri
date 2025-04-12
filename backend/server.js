@@ -1,42 +1,48 @@
-const express = require("express");
-const app = express();
-const http = require("http").createServer(app);
-const cors = require("cors");
-const io = require("socket.io")(http, {
-  cors: {
-    origin: "*",
-  },
-});
+const socket = io('https://whatsappme.onrender.com');
+const email = localStorage.getItem('email');
+let currentChat = null;
 
-app.use(cors());
+if (!email) {
+  window.location.href = 'index.html';
+}
 
-let onlineUsers = {};
+socket.emit('login', email);
 
-io.on("connection", (socket) => {
-  let userEmail = null;
-
-  socket.on("login", (email) => {
-    userEmail = email;
-    onlineUsers[email] = socket.id;
-    io.emit("online users", Object.keys(onlineUsers));
-  });
-
-  socket.on("chat message", (data) => {
-    io.emit("chat message", data); // Send to all
-  });
-
-  socket.on("disconnect", () => {
-    if (userEmail) {
-      delete onlineUsers[userEmail];
-      io.emit("online users", Object.keys(onlineUsers));
+socket.on('onlineUsers', (users) => {
+  const list = document.getElementById('onlineUsers');
+  list.innerHTML = '';
+  users.forEach(user => {
+    if (user !== email) {
+      const li = document.createElement('li');
+      li.textContent = user;
+      li.onclick = () => {
+        currentChat = user;
+        document.getElementById('chatWith').textContent = `Chatting with ${user}`;
+        document.getElementById('chatArea').innerHTML = '';
+      };
+      list.appendChild(li);
     }
   });
 });
 
-app.get("/", (req, res) => {
-  res.send("Server running...");
+socket.on('receive', ({ from, message }) => {
+  if (from === currentChat) {
+    appendMessage(from, message, 'received');
+  }
 });
 
-http.listen(3000, () => {
-  console.log("Server running on port 3000");
-});
+function sendMessage() {
+  const msg = document.getElementById('messageInput').value;
+  if (msg && currentChat) {
+    socket.emit('send', { to: currentChat, message: msg });
+    appendMessage(email, msg, 'sent');
+    document.getElementById('messageInput').value = '';
+  }
+}
+
+function appendMessage(sender, message, type) {
+  const div = document.createElement('div');
+  div.className = `message ${type}`;
+  div.textContent = message;
+  document.getElementById('chatArea').appendChild(div);
+}
