@@ -1,0 +1,25 @@
+<!-- frontend/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fake WhatsApp - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Enter Your Email</h2>
+    <input type="email" id="emailInput" placeholder="you@example.com" required />
+    <button onclick="login()">Continue</button>
+  </div>
+
+  <script>
+    function login() {
+      const email = document.getElementById("emailInput").value;
+      if (email) {
+        localStorage.setItem("email", email);
+        window.location.href = "chat.html";
+      }
+    }
+  </script>
+</body>
+</html>
