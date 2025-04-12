@@ -1,58 +1,53 @@
-<!-- frontend/chat.html -->
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Fake WhatsApp - Chat</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Fake WhatsApp</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="chat-container">
-    <h2>Welcome, <span id="userEmail"></span></h2>
-    <div id="messages" class="messages"></div>
-
-    <div class="send-box">
-      <input type="email" id="toEmail" placeholder="Send to (email)" required />
-      <input type="text" id="messageInput" placeholder="Type your message..." />
-      <button onclick="sendMessage()">Send</button>
-    </div>
+  <div class="container">
+    <h2>Fake WhatsApp</h2>
+    <div id="online-users"></div>
+    <div id="chat-box"></div>
+    <input id="message" type="text" placeholder="Type a message..." />
+    <button id="send">Send</button>
   </div>
 
-  <script src="https://whatsappme.onrender.com/socket.io/socket.io.js"></script>
+  <!-- Replace below with your Render backend URL -->
+  <script src="https://your-backend-name.onrender.com/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io("https://your-backend-name.onrender.com");
 
+    const email = localStorage.getItem("email") || prompt("Enter your email:");
+    localStorage.setItem("email", email);
+    socket.emit("login", email);
 
- <!-- Load socket.io from your backend -->
-<script src="https://whatsappme.onrender.com/socket.io/socket.io.js"></script>
-<script>
-  const socket = io("https://whatsappme.onrender.com"); // Your backend URL
+    const chatBox = document.getElementById("chat-box");
+    const messageInput = document.getElementById("message");
+    const sendBtn = document.getElementById("send");
+    const onlineDiv = document.getElementById("online-users");
 
-  const email = localStorage.getItem("email") || prompt("Enter your email:");
-  localStorage.setItem("email", email);
+    sendBtn.addEventListener("click", () => {
+      const msg = messageInput.value.trim();
+      if (msg !== "") {
+        socket.emit("chat message", { sender: email, message: msg });
+        messageInput.value = "";
+      }
+    });
 
-  const chatBox = document.getElementById("chat-box");
-  const messageInput = document.getElementById("message");
-  const sendBtn = document.getElementById("send");
+    socket.on("chat message", (data) => {
+      const msgDiv = document.createElement("div");
+      const who = data.sender === email ? "You" : data.sender;
+      msgDiv.innerHTML = `<strong>${who}:</strong> ${data.message}`;
+      msgDiv.classList.add("msg");
+      if (who === "You") msgDiv.classList.add("you");
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
 
-  sendBtn.addEventListener("click", () => {
-    const message = messageInput.value;
-    if (message.trim() !== "") {
-      socket.emit("chat message", {
-        sender: email,
-        message: message
-      });
-      messageInput.value = "";
-    }
-  });
-
-  socket.on("chat message", (data) => {
-    const msgDiv = document.createElement("div");
-    msgDiv.innerText = `${data.sender}: ${data.message}`;
-    chatBox.appendChild(msgDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  });
-</script>
-
-  
-
+    socket.on("online users", (users) => {
+      onlineDiv.innerHTML = `<b>Online:</b> ${users.join(", ")}`;
+    });
+  </script>
 </body>
 </html>
-
