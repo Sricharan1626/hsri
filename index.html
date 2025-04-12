@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login | Neon Chat</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | ChatApp</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="login-page">
-  <div class="login-box">
-    <h2>Neon Chat Login</h2>
-    <input type="email" id="emailInput" placeholder="Enter your email" required>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Enter your email" />
     <button onclick="login()">Login</button>
   </div>
+
   <script>
     function login() {
-      const email = document.getElementById('emailInput').value.trim();
-      if (email) {
-        localStorage.setItem('email', email);
-        window.location.href = 'chat.html';
+      const email = document.getElementById("email").value;
+      if (email.trim()) {
+        localStorage.setItem("email", email);
+        window.location.href = "chat.html";
       }
     }
   </script>
