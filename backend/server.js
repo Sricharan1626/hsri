@@ -1,36 +1,42 @@
-// backend/server.js
-const express = require('express');
+const express = require("express");
 const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
-const path = require('path');
+const http = require("http").createServer(app);
+const cors = require("cors");
+const io = require("socket.io")(http, {
+  cors: {
+    origin: "*",
+  },
+});
 
-const users = {};
+app.use(cors());
 
-app.use(express.static(path.join(__dirname, '../frontend')));
+let onlineUsers = {};
 
-io.on('connection', (socket) => {
-  socket.on('join', (email) => {
-    users[email] = socket.id;
+io.on("connection", (socket) => {
+  let userEmail = null;
+
+  socket.on("login", (email) => {
+    userEmail = email;
+    onlineUsers[email] = socket.id;
+    io.emit("online users", Object.keys(onlineUsers));
   });
 
-  socket.on('send-message', ({ to, from, message }) => {
-    const toSocketId = users[to];
-    if (toSocketId) {
-      io.to(toSocketId).emit('receive-message', { from, message });
-    }
+  socket.on("chat message", (data) => {
+    io.emit("chat message", data); // Send to all
   });
 
-  socket.on('disconnect', () => {
-    for (let email in users) {
-      if (users[email] === socket.id) {
-        delete users[email];
-        break;
-      }
+  socket.on("disconnect", () => {
+    if (userEmail) {
+      delete onlineUsers[userEmail];
+      io.emit("online users", Object.keys(onlineUsers));
     }
   });
 });
 
+app.get("/", (req, res) => {
+  res.send("Server running...");
+});
+
 http.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
+  console.log("Server running on port 3000");
 });
