@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Neon Chat</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body class="chat-page">
   <div class="container">
@@ -11,21 +12,21 @@
       <h3>Online Users</h3>
       <ul id="onlineUsers"></ul>
     </div>
+
     <div class="chat-box">
       <div class="chat-header" id="chatWith">Welcome!</div>
       <div class="chat-area" id="chatArea"></div>
       <div class="message-input">
-        <input type="text" id="messageInput" placeholder="Type a message...">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
         <button onclick="sendMessage()">Send</button>
       </div>
     </div>
   </div>
+
   <script>
-  const email = localStorage.getItem('email');
-  if (!email) {
-    window.location.href = 'index.html';
-  }
-</script>
+    const email = localStorage.getItem('email');
+    if (!email) window.location.href = 'index.html';
+  </script>
 
   <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <script src="script.js"></script>
