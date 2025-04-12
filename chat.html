@@ -2,33 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Neon Chat</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatApp</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="chat-page">
+<body onload="checkLogin()">
   <div class="container">
     <div class="sidebar">
       <h3>Online Users</h3>
       <ul id="onlineUsers"></ul>
     </div>
-
     <div class="chat-box">
-      <div class="chat-header" id="chatWith">Welcome!</div>
-      <div class="chat-area" id="chatArea"></div>
-      <div class="message-input">
+      <div class="chat-header">
+        <span id="userEmail"></span>
+        <button onclick="logout()">Logout</button>
+      </div>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input">
         <input type="text" id="messageInput" placeholder="Type a message..." />
         <button onclick="sendMessage()">Send</button>
       </div>
     </div>
   </div>
 
-  <script>
-    const email = localStorage.getItem('email');
-    if (!email) window.location.href = 'index.html';
-  </script>
-
-  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
